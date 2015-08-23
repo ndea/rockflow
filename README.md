@@ -2,7 +2,7 @@
 
 What is rockflow? Well with rockflow you are able to define workflows (yes even parallel workflows) by writing simple small steps and aggregating them in your flow (the bigger picture... you know)
 
-Let's start the tour:
+Let's start the tour!
 
 ## Installation
 
@@ -21,6 +21,19 @@ Or install it yourself as:
     $ gem install rockflow
 
 ## Usage
+To write your own flow you need two ingredients: the **flow** and your **steps** lets start by looking at the flow.
+
+```ruby
+# app/workflows/awesome_flow.rb
+class AwesomeFlow < Rockflow::Flow
+    def setup
+        rock RockStep1
+        rock RockStep2
+        rock RockStep3, after: [RockStep1, RockStep2]
+    end
+end
+```
+Easy right? Notice that **RockStep1** and **RockStep2** will be executed parallel (so beware of thread safety and stuff). **RockStep3** will only execute if **RockStep1** and **RockStep2** are finished.
 
 ## Development
 
