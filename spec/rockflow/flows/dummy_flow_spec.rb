@@ -7,4 +7,10 @@ describe DummyFlow do
   end
 
   it { expect(subject.concert!).not_to be_nil }
+  it { expect(subject.concert!).to eq subject.steps}
+
+  it  do
+    subject.concert!
+    subject
+  end
 end

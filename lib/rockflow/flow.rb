@@ -13,13 +13,16 @@ module Rockflow
     end
 
     def rock(klazz, opts = {})
-      @steps << klazz.new(self)
+      @steps << klazz.new(self, opts)
     end
 
     def concert!
-      ::Parallel.each(@steps, in_processes: 2) do |step|
+      results = ::Parallel.each(@steps, in_threads: 4) do |step|
         step.it_up
+        step.finish!
+        step
       end
+      results
     end
 
   end
