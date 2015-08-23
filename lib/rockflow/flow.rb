@@ -1,17 +1,18 @@
 module Rockflow
   class Flow
 
-    attr_accessor :steps
+    attr_accessor :steps, :payload
 
-    def initialize
+    def initialize(payload = {})
       @steps = []
+      @payload = payload
       setup
     end
 
     def setup
     end
 
-    def rock(klazz)
+    def rock(klazz, opts = {})
       @steps << klazz.new(self)
     end
 

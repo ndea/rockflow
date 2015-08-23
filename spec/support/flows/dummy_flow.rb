@@ -7,7 +7,7 @@ class DummyFlow < Rockflow::Flow
   def setup
     rock DummyStep
     rock DummyStep2
-    rock DummyStep3
+    rock DummyStep3, after: DummyStep2
   end
 
 end
