@@ -68,7 +68,12 @@ class RockStep3 < Rockflow::Step
     end
 end
 ```
+So now i have defined my steps and my flow but how can i execute it? Well simple just use it like this:
 
+```ruby
+flow = AwesomeFlow.new
+flow.concert! # execute all steps
+```
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
