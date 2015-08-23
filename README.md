@@ -38,7 +38,7 @@ end
 Easy right? Notice that **RockStep1** and **RockStep2** will be executed parallel (so beware of thread safety and stuff). **RockStep3** will only execute if **RockStep1** and **RockStep2** are finished.
 Here is a picture.
 
-## [![](http://imgur.com/7BrU2kT)](https://qurasoft.de)
+## [![](http://i.imgur.com/7BrU2kT.png)](https://qurasoft.de)
 ##### Steps
 Look at my steps ... my steps are amazing...
 ```ruby
