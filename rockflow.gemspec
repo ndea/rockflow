@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = %q{Create workflows the easy way}
   spec.description = %q{Rockflow allows you to define easy workflows that rock.}
-  spec.homepage = "qurasoft.de"
+  spec.homepage = "http://qurasoft.de"
   spec.license = "MIT"
 
   spec.files = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
