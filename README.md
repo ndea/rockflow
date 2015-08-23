@@ -1,8 +1,8 @@
 # Rockflow
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rockflow`. To experiment with that code, run `bin/console` for an interactive prompt.
+What is rockflow? Well with rockflow you are able to define workflows (yes even parallel workflows) by writing simple small steps and aggregating them in your flow (the bigger picture... you know)
 
-TODO: Delete this and the text above, and describe your gem
+Let's start the tour!
 
 ## Installation
 
@@ -22,7 +22,69 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To write your own flow you need two ingredients: the **flow** and your **steps** lets start by looking at the flow.
+
+##### Flow
+```ruby
+# app/workflows/awesome_flow.rb
+class AwesomeFlow < Rockflow::Flow
+    def setup
+        rock RockStep1
+        rock RockStep2
+        rock RockStep3, after: [RockStep1, RockStep2]
+    end
+end
+```
+Easy right? Notice that **RockStep1** and **RockStep2** will be executed parallel (so beware of thread safety and stuff). **RockStep3** will only execute if **RockStep1** and **RockStep2** are finished.
+Here is a picture.
+
+## [![](http://i.imgur.com/7BrU2kT.png)](https://qurasoft.de)
+##### Steps
+Look at my steps ... my steps are amazing...
+```ruby
+# app/steps/rock_step1.rb
+class RockStep1 < Rockflow::Step
+    def it_up
+        puts "Iam RockStep1 and i am adding something to the payload"
+        add_payload :a, 2
+    end
+end
+```
+```ruby
+# app/steps/rock_step2.rb
+class RockStep2 < Rockflow::Step
+    def it_up
+        puts "Iam RockStep2 and i am adding something to the payload"
+        add_payload :b, 2
+    end
+end
+```
+
+```ruby
+# app/steps/rock_step3.rb
+class RockStep3 < Rockflow::Step
+     def it_up
+        puts "Iam RockStep3 and i am aggregating something from the payload"
+        result = payload[:a] + payload[:b] + payload[:c]
+        puts "Result: #{result}"
+    end
+end
+```
+So now i have defined my steps and my flow but how can i execute it? Well simple just use it like this:
+
+```ruby
+flow = AwesomeFlow.new
+flow.concert! # execute all steps
+```
+
+#### Summary
+Define your flow by inheriting from **RockFlow::Flow**. Inside your defined flow override the setup method and use the **rock** keyword defined by your step class. Available options for the rock method are at the moment:
+- **after** which takes a StepClass or an array of step classes.
+
+After that start writing your steps by inheriting from **RockFlow::Step** and overriding the **it_up** method. Inside of your inherited class you can use following methods.
+
+- add_payload key, value - This method adds data that can be used across your steps inside of your flow
+- payload - This method gives you the chance to access your whole payload from your flow.
 
 ## Development
 
