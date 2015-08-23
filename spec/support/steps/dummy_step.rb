@@ -1,8 +1,8 @@
 class DummyStep < Rockflow::Step
 
   def it_up
-    puts 'Iam dummy step 1 - and here iam adding y to payload'
-    add_payload :y, 2
+    puts 'Iam dummy step 1 - and here iam adding a to payload'
+    add_payload :a, 2
   end
 
 end

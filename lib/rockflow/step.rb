@@ -6,7 +6,7 @@ module Rockflow
       @flow = flow
       @after_dependencies = []
       @status = :not_started
-      add_after_dependencies(*opts[:after])
+      add_after_dependencies(opts[:after])
     end
 
     def it_up
