@@ -74,6 +74,16 @@ So now i have defined my steps and my flow but how can i execute it? Well simple
 flow = AwesomeFlow.new
 flow.concert! # execute all steps
 ```
+
+#### Summary
+Define your flow by inheriting from **RockFlow::Flow**. Inside your defined flow override the setup method and use the **rock** keyword defined by your step class. Available options for the rock method are at the moment:
+- **after** which takes a StepClass or an array of step classes.
+
+After that start writing your steps by inheriting from **RockFlow::Step** and overriding the **it_up** method. Inside of your inherited class you can use following methods.
+
+- add_payload key, value - This method adds data that can be used across your steps inside of your flow
+- payload - This method gives you the chance to access your whole payload from your flow.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
