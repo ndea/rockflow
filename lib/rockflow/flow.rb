@@ -17,12 +17,25 @@ module Rockflow
     end
 
     def concert!
-      results = ::Parallel.each(@steps, in_threads: 4) do |step|
-        step.it_up
-        step.finish!
-        step
+      while !steps_finished?
+        ::Parallel.each(next_free_steps, in_threads: 4) do |step|
+          step.it_up
+          step.finish!
+        end
       end
-      results
+    end
+
+    def next_free_steps
+      @steps.select do |step|
+        step.after_dependencies_finished? && !step.finished?
+      end
+    end
+
+    def steps_finished?
+      @steps.inject(true) do |result, elem|
+        result = result && elem.finished?
+        result
+      end
     end
 
   end

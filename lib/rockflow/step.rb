@@ -20,6 +20,10 @@ module Rockflow
       @status = :finished
     end
 
+    def finished?
+      @status == :finished
+    end
+
     def add_payload(key, value)
       @flow.payload[key] = value
     end
@@ -27,6 +31,16 @@ module Rockflow
     def add_after_dependencies(deps = [])
       [deps].flatten.each do |dep|
         @after_dependencies << dep
+      end
+    end
+
+    def after_dependencies_finished?
+      @after_dependencies.inject(true) do |result, elem|
+        dependent_steps_running = !(@flow.steps.select do |step|
+          step.class == elem && !step.finished?
+        end.any?)
+        result = result && dependent_steps_running
+        result
       end
     end
 
