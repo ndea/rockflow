@@ -9,13 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Erwin Schens"]
   spec.email         = ["erwinschens@uni-koblenz.de"]
 
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com' to prevent pushes to rubygems.org, or delete to allow pushes to any server."
-  end
-
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Create workflows the easy way}
+  spec.description   = %q{Rockflow allows you to define easy workflows that rock.}
+  spec.homepage      = "qurasoft.de"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
