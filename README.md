@@ -1,8 +1,8 @@
 # Rockflow
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rockflow`. To experiment with that code, run `bin/console` for an interactive prompt.
+What is rockflow? Well with rockflow you are able to define workflows (yes even parallel workflows) by writing simple small steps and aggregating them in your flow (the bigger picture... you know)
 
-TODO: Delete this and the text above, and describe your gem
+Let's start the tour:
 
 ## Installation
 
@@ -21,8 +21,6 @@ Or install it yourself as:
     $ gem install rockflow
 
 ## Usage
-
-TODO: Write usage instructions here
 
 ## Development
 
