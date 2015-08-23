@@ -65,7 +65,7 @@ end
 class RockStep3 < Rockflow::Step
      def it_up
         puts "Iam RockStep3 and i am aggregating something from the payload"
-        result = payload[:a] + payload[:b] + payload[:c]
+        result = payload[:a] + payload[:b]
         puts "Result: #{result}"
     end
 end
