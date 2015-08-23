@@ -21,8 +21,10 @@ Or install it yourself as:
     $ gem install rockflow
 
 ## Usage
+
 To write your own flow you need two ingredients: the **flow** and your **steps** lets start by looking at the flow.
 
+##### Flow
 ```ruby
 # app/workflows/awesome_flow.rb
 class AwesomeFlow < Rockflow::Flow
@@ -34,6 +36,38 @@ class AwesomeFlow < Rockflow::Flow
 end
 ```
 Easy right? Notice that **RockStep1** and **RockStep2** will be executed parallel (so beware of thread safety and stuff). **RockStep3** will only execute if **RockStep1** and **RockStep2** are finished.
+
+##### Steps
+Look at my steps ... my steps are amazing...
+```ruby
+# app/steps/rock_step1.rb
+class RockStep1 < Rockflow::Step
+    def it_up
+        puts "Iam RockStep1 and i am adding something to the payload"
+        add_payload :a, 2
+    end
+end
+```
+```ruby
+# app/steps/rock_step2.rb
+class RockStep2 < Rockflow::Step
+    def it_up
+        puts "Iam RockStep2 and i am adding something to the payload"
+        add_payload :b, 2
+    end
+end
+```
+
+```ruby
+# app/steps/rock_step3.rb
+class RockStep3 < Rockflow::Step
+     def it_up
+        puts "Iam RockStep3 and i am aggregating something from the payload"
+        result = payload[:a] + payload[:b] + payload[:c]
+        puts "Result: #{result}"
+    end
+end
+```
 
 ## Development
 
