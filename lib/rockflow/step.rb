@@ -5,6 +5,7 @@ module Rockflow
     def initialize(flow, opts = {})
       @flow = flow
       @after_dependencies = []
+      @params = opts[:params]
       @status = :not_started
       add_after_dependencies(opts[:after])
     end
