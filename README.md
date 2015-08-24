@@ -9,7 +9,7 @@ Let's start the tour!
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rockflow', '~> 1.0.0'
+gem 'rockflow', '~> 1.0.1'
 ```
 
 And then execute:
@@ -30,7 +30,7 @@ To write your own flow you need two ingredients: the **flow** and your **steps**
 class AwesomeFlow < Rockflow::Flow
     def setup
         rock RockStep1
-        rock RockStep2
+        rock RockStep2, params: {lorem: 'ipsum'}
         rock RockStep3, after: [RockStep1, RockStep2]
     end
 end
@@ -55,6 +55,7 @@ end
 class RockStep2 < Rockflow::Step
     def it_up
         puts "Iam RockStep2 and i am adding something to the payload"
+        puts "And here are my params #{params}"
         add_payload :b, 2
     end
 end
@@ -80,6 +81,7 @@ flow.concert! # execute all steps
 #### Summary
 Define your flow by inheriting from **RockFlow::Flow**. Inside your defined flow override the setup method and use the **rock** keyword defined by your step class. Available options for the rock method are at the moment:
 - **after** which takes a StepClass or an array of step classes.
+- **params** you can specify extra params to be used in a step.
 
 After that start writing your steps by inheriting from **RockFlow::Step** and overriding the **it_up** method. Inside of your inherited class you can use following methods.
 
