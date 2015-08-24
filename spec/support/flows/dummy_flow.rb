@@ -7,7 +7,7 @@ class DummyFlow < Rockflow::Flow
 
   def setup
     rock DummyStep
-    rock DummyStep2
+    rock DummyStep2, params: {url: 'http://api.de'}
     rock DummyStep3
     rock DummyStep4, after: [DummyStep, DummyStep2, DummyStep3]
   end

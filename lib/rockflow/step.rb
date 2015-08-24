@@ -1,6 +1,6 @@
 module Rockflow
   class Step
-    attr_accessor :flow, :status
+    attr_accessor :flow, :status, :params
 
     def initialize(flow, opts = {})
       @flow = flow
