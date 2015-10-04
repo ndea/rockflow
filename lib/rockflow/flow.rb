@@ -19,7 +19,9 @@ module Rockflow
     def concert!
       while !steps_finished?
         ::Parallel.each(next_free_steps, in_threads: 4) do |step|
+          step.execute_pre_conditions
           step.it_up
+          step.execute_post_conditions
           step.finish!
         end
       end

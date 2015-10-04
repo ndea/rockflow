@@ -1,12 +1,13 @@
 module Rockflow
   class Step
-    attr_accessor :flow, :status, :params
+    attr_accessor :flow, :status, :params, :conditions
 
     def initialize(flow, opts = {})
       @flow = flow
       @after_dependencies = []
       @params = opts[:params]
       @status = :not_started
+      @conditions = opts[:conditions]
       add_after_dependencies(opts[:after])
     end
 
@@ -23,6 +24,14 @@ module Rockflow
 
     def finished?
       @status == :finished
+    end
+
+    def fail!
+      @status = :failed
+    end
+
+    def failed?
+      @status == :failed
     end
 
     def add_payload(key, value)
@@ -43,6 +52,57 @@ module Rockflow
         result = result && dependent_steps_running
         result
       end
+    end
+
+    def select_conditions(pre_or_post)
+      conditions.select do |cond|
+        cond[pre_or_post.to_sym]
+      end
+    end
+
+    def execute_pre_conditions
+      select_conditions(:pre) do |cond|
+        exec_condition(cond, Rockflow::Errors::PreCondition)
+      end
+    end
+
+    def execute_post_conditions
+      select_conditions(:post) do |cond|
+        exec_condition(cond, Rockflow::Errors::PostCondition)
+      end
+    end
+
+    private
+
+    def exec_condition(block_or_symbol, error)
+      exec_block_or_symbol(block_or_symbol, error) do
+        exec_condition_block(block_or_symbol, error)
+      end
+    end
+
+    def exec_block_or_symbol(block_or_symbol, error)
+      if block_or_symbol.is_a? Proc
+        yield
+      elsif block_or_symbol.is_a? Symbol
+        exec_method(block_or_symbol, error)
+      end
+    end
+
+    def exec_condition_block(block, error)
+      unless block.call
+        fail_execution(error)
+      end
+    end
+
+    def exec_method(method, error)
+      unless self.step.send(method.to_sym)
+        fail_execution(error)
+      end
+    end
+
+    def fail_execution(error)
+      self.fail!
+      raise error.new(self)
     end
 
   end
