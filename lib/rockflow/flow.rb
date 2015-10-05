@@ -16,15 +16,14 @@ module Rockflow
       @steps << klazz.new(self, opts)
     end
 
-    def concert!
-      while !steps_finished?
-        ::Parallel.each(next_free_steps, in_threads: 4) do |step|
-          step.execute_pre_conditions
-          step.it_up
-          step.execute_post_conditions
-          step.finish!
-        end
+    def concert
+      execute_steps.inject(true) do |result, elem|
+        result && !elem.errors.any?
       end
+    end
+
+    def concert!
+      execute_steps
     end
 
     def next_free_steps
@@ -35,9 +34,21 @@ module Rockflow
 
     def steps_finished?
       @steps.inject(true) do |result, elem|
-        result = result && elem.finished?
+        result = result && (elem.finished? || elem.failed?)
         result
       end
+    end
+
+    def execute_steps
+      while !steps_finished?
+        ::Parallel.each(next_free_steps, in_threads: 4) do |step|
+          step.execute_pre_conditions
+          step.it_up
+          step.execute_post_conditions
+          step.finish! unless step.failed?
+        end
+      end
+      @steps
     end
 
   end

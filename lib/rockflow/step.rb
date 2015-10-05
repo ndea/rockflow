@@ -1,10 +1,11 @@
 module Rockflow
   class Step
-    attr_accessor :flow, :status, :params, :conditions
+    attr_accessor :flow, :status, :params, :conditions, :errors
 
     def initialize(flow, opts = {})
       @flow = flow
       @after_dependencies = []
+      @errors = []
       @params = opts[:params]
       @status = :not_started
       @conditions = opts[:conditions]
@@ -57,18 +58,20 @@ module Rockflow
     def select_conditions(pre_or_post)
       conditions.select do |cond|
         cond[pre_or_post.to_sym]
+      end.map do |cond|
+        cond[pre_or_post.to_sym]
       end
     end
 
     def execute_pre_conditions
       select_conditions(:pre) do |cond|
-        exec_condition(cond, Rockflow::Errors::PreCondition)
+        exec_condition(cond, ::Rockflow::Errors::PreCondition)
       end
     end
 
     def execute_post_conditions
       select_conditions(:post) do |cond|
-        exec_condition(cond, Rockflow::Errors::PostCondition)
+        exec_condition(cond, ::Rockflow::Errors::PostCondition)
       end
     end
 
@@ -89,20 +92,20 @@ module Rockflow
     end
 
     def exec_condition_block(block, error)
-      unless block.call
+      if block.call
         fail_execution(error)
       end
     end
 
     def exec_method(method, error)
-      unless self.step.send(method.to_sym)
+      if self.step.send(method.to_sym)
         fail_execution(error)
       end
     end
 
     def fail_execution(error)
       self.fail!
-      raise error.new(self)
+      @errors << error.new(self)
     end
 
   end
