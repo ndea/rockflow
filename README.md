@@ -30,7 +30,7 @@ To write your own flow you need two ingredients: the **flow** and your **steps**
 # app/workflows/awesome_flow.rb
 class AwesomeFlow < Rockflow::Flow
     def setup
-        rock RockStep1
+        rock RockStep1, conditions: [{pre: -> { payload[:foo].present? }}]
         rock RockStep2, params: {lorem: 'ipsum'}
         rock RockStep3, after: [RockStep1, RockStep2]
     end
@@ -83,6 +83,24 @@ flow.concert! # execute all steps
 Define your flow by inheriting from **RockFlow::Flow**. Inside your defined flow override the setup method and use the **rock** keyword defined by your step class. Available options for the rock method are at the moment:
 - **after** which takes a StepClass or an array of step classes.
 - **params** you can specify extra params to be used in a step.
+- **conditions** are used to define pre or post conditions for every step.
+
+#### Conditions 
+Conditions are used to define pre or post conditions for every step. To finish a step each given pre or post condition must evaluate to true. 
+Let me give you an example:
+```ruby 
+class MyFlow < Rockflow::Flow
+
+  def setup
+    rock Step1, conditions: [{pre: -> { false }},
+                             {post: -> { true }}]
+  end
+
+end
+
+flow = MyFlow.new
+flow.concert # => returns false because the pre condition is false
+```
 
 After that start writing your steps by inheriting from **RockFlow::Step** and overriding the **it_up** method. Inside of your inherited class you can use following methods.
 
