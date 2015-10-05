@@ -60,7 +60,7 @@ module Rockflow
         cond[pre_or_post.to_sym]
       end.map do |cond|
         cond[pre_or_post.to_sym]
-      end
+      end rescue []
     end
 
     def execute_pre_conditions
