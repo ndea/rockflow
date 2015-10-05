@@ -64,13 +64,13 @@ module Rockflow
     end
 
     def execute_pre_conditions
-      select_conditions(:pre) do |cond|
+      select_conditions(:pre).each do |cond|
         exec_condition(cond, ::Rockflow::Errors::PreCondition)
       end
     end
 
     def execute_post_conditions
-      select_conditions(:post) do |cond|
+      select_conditions(:post).each do |cond|
         exec_condition(cond, ::Rockflow::Errors::PostCondition)
       end
     end
@@ -92,13 +92,13 @@ module Rockflow
     end
 
     def exec_condition_block(block, error)
-      if block.call
+      unless block.call
         fail_execution(error)
       end
     end
 
     def exec_method(method, error)
-      if self.step.send(method.to_sym)
+      unless self.step.send(method.to_sym)
         fail_execution(error)
       end
     end
