@@ -21,6 +21,15 @@ Or install it yourself as:
 
     $ gem install rockflow
 
+## Getting started
+Run the bundle command to install it.
+After you install Rockflow and add it to your Gemfile, you need to run the generator:
+
+```bash
+rails generate rockflow:install
+```
+The generator will install an initializer which describes all of Rockflow's configuration options.
+
 ## Usage
 
 To write your own flow you need two ingredients: the **flow** and your **steps** lets start by looking at the flow.
@@ -76,8 +85,11 @@ So now i have defined my steps and my flow but how can i execute it? Well simple
 
 ```ruby
 flow = AwesomeFlow.new
-flow.concert! # execute all steps
+flow.concert! # execute all steps and returns all steps
+flow.concert # returns false or true
 ```
+
+Please note that if any of your steps fail the parallel execution is interrupted and and an exception is raised. 
 
 #### Summary
 Define your flow by inheriting from **RockFlow::Flow**. Inside your defined flow override the setup method and use the **rock** keyword defined by your step class. Available options for the rock method are at the moment:
