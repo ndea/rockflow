@@ -42,10 +42,14 @@ module Rockflow
     def execute_steps
       while !steps_finished?
         ::Parallel.each(next_free_steps, threads_or_processes.to_sym => Rockflow.configuration.thread_or_processes) do |step|
-          step.execute_pre_conditions
-          step.it_up unless step.failed?
-          step.execute_post_conditions
-          step.finish! unless step.failed?
+          begin
+            step.execute_pre_conditions
+            step.it_up unless step.failed?
+            step.execute_post_conditions
+            step.finish! unless step.failed?
+          rescue e
+            raise Parallel::Break, e.message
+          end
         end
       end
       @steps
