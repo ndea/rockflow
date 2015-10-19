@@ -49,6 +49,7 @@ module Rockflow
             step.finish! unless step.failed?
           rescue Exception => e
             step.fail!
+            step.errors << e
             raise Parallel::Break, e.message
           end
         end
