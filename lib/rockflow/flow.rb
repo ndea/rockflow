@@ -41,7 +41,7 @@ module Rockflow
 
     def execute_steps
       while !steps_finished?
-        ::Parallel.each(next_free_steps, in_threads: 4) do |step|
+        ::Parallel.each(next_free_steps, threads_or_processes.to_sym => Rockflow.configuration.thread_or_processes) do |step|
           step.execute_pre_conditions
           step.it_up unless step.failed?
           step.execute_post_conditions
@@ -49,6 +49,16 @@ module Rockflow
         end
       end
       @steps
+    end
+
+    private
+
+    def threads_or_processes
+      if Rockflow.configuration.use_threads
+        :in_threads
+      else
+        :in_processes
+      end
     end
 
   end
