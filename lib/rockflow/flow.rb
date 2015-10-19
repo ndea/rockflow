@@ -47,7 +47,7 @@ module Rockflow
             step.it_up unless step.failed?
             step.execute_post_conditions
             step.finish! unless step.failed?
-          rescue e
+          rescue Exception => e
             raise Parallel::Break, e.message
           end
         end
