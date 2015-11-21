@@ -85,8 +85,8 @@ So now i have defined my steps and my flow but how can i execute it? Well simple
 
 ```ruby
 flow = AwesomeFlow.new
-flow.concert! # execute all steps and returns all steps
-flow.concert # returns false or true
+flow.concert! # execute all steps and returns all steps. If an error occurs inside the steps it is raised.
+flow.concert # returns false or true depending if a step fails.
 ```
 
 Please note that if any of your steps fail the parallel execution is interrupted and and an exception is raised. 
