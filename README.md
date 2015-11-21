@@ -10,7 +10,7 @@ Let's start the tour!
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rockflow', '~> 1.0.1'
+gem 'rockflow', '~> 1.2.4'
 ```
 
 And then execute:
